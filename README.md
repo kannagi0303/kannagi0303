@@ -50,15 +50,18 @@ Thank you for using my software.
 
 ## Projects
 
-| Project | Description |
-| --- | --- |
-| [yt-dlp-gui-v2](https://github.com/kannagi0303/yt-dlp-gui-v2) | A rebuilt, portable Windows GUI for media downloaders. |
-| [MPC-VR-Edition](https://github.com/kannagi0303/MPC-VR-Edition) | Video rendering and enhancement. |
-| [RelayGate](https://github.com/kannagi0303/RelayGate) | A Windows web traffic tool for routing and content processing. |
+<!-- downloads:start -->
+**Total downloads: 194,028**
 
-### Previous project
+| Project | Description | Downloads |
+| --- | --- | ---: |
+| [yt-dlp-gui-v2](https://github.com/kannagi0303/yt-dlp-gui-v2) | A rebuilt, portable Windows GUI for media downloaders. | 16,841 |
+| [yt-dlp-gui](https://github.com/kannagi0303/yt-dlp-gui) | The original Windows GUI for yt-dlp (no longer maintained). | 177,141 |
+| [MPC-VR-Edition](https://github.com/kannagi0303/MPC-VR-Edition) | Video rendering and enhancement. | 29 |
+| [RelayGate](https://github.com/kannagi0303/RelayGate) | A Windows web traffic tool for routing and content processing. | 17 |
+<!-- downloads:end -->
 
-[yt-dlp-gui](https://github.com/kannagi0303/yt-dlp-gui) — The original Windows GUI for yt-dlp. No longer maintained; please refer to [yt-dlp-gui-v2](https://github.com/kannagi0303/yt-dlp-gui-v2) for ongoing development.
+Download counts include assets from all currently available GitHub Releases, not just the latest release.
 
 For project-related questions, suggestions, or bug reports, please use the relevant repository's Issues or Discussions.
 
