@@ -57,54 +57,60 @@ jobs:
               tag = re.sub(r"([\\\[\]`*_!|])", r"\\\1", tag)
               stats[project] = (downloads, stars, tag)
 
-          path = Path("README.md")
-          original = path.read_text(encoding="utf-8")
-          start, end = "<!-- downloads:start -->", "<!-- downloads:end -->"
-          if original.count(start) != 1 or original.count(end) != 1:
-              raise RuntimeError("Expected exactly one statistics block")
-          before, remainder = original.split(start, 1)
-          block, after = remainder.split(end, 1)
-          total = sum(item[0] for item in stats.values())
-          block, changed = re.subn(
-              r"(?m)^\*\*Total downloads: [\d,]+\*\*$",
-              f"**Total downloads: {total:,}**", block,
-          )
-          if changed != 1:
-              raise RuntimeError("Missing total downloads field")
+          def update_readme(path):
+              original = path.read_text(encoding="utf-8")
+              start, end = "<!-- downloads:start -->", "<!-- downloads:end -->"
+              if original.count(start) != 1 or original.count(end) != 1:
+                  raise RuntimeError("Expected exactly one statistics block")
+              before, remainder = original.split(start, 1)
+              block, after = remainder.split(end, 1)
+              total = sum(item[0] for item in stats.values())
+              block, changed = re.subn(
+                  r"(?m)^(\*\*(?:Total downloads:|總下載次數：|総ダウンロード数：)\s*)[\d,]+\*\*$",
+                  lambda m: f"{m[1]}{total:,}**", block,
+              )
+              if changed != 1:
+                  raise RuntimeError("Missing total downloads field")
 
-          for project, (downloads, stars, tag) in stats.items():
-              url = f"https://github.com/{owner}/{project}"
-              prefix = f"| [{project}]({url}) |"
-              lines = block.splitlines(keepends=True)
-              matched = 0
-              for i, line in enumerate(lines):
-                  if not line.startswith(prefix):
-                      continue
-                  # Preserve the project name, description and manually set status.
-                  parts = re.split(r"(?<!\\)\|", line.rstrip("\n"))
-                  if len(parts) != 8:
-                      raise RuntimeError(f"Unexpected table structure for {project}")
-                  parts[4] = f" [{tag}]({url}/releases/latest) "
-                  parts[5] = f" {stars:,} "
-                  parts[6] = f" {downloads:,} "
-                  lines[i] = "|".join(parts) + ("\n" if line.endswith("\n") else "")
-                  matched += 1
-              if matched != 1:
-                  raise RuntimeError(f"Missing or duplicate row: {project}")
-              block = "".join(lines)
+              for project, (downloads, stars, tag) in stats.items():
+                  url = f"https://github.com/{owner}/{project}"
+                  prefix = f"| [{project}]({url}) |"
+                  lines = block.splitlines(keepends=True)
+                  matched = 0
+                  for i, line in enumerate(lines):
+                      if not line.startswith(prefix):
+                          continue
+                      # Preserve the project name, description and manually set status.
+                      parts = re.split(r"(?<!\\)\|", line.rstrip("\n"))
+                      if len(parts) != 8:
+                          raise RuntimeError(f"Unexpected table structure for {project}")
+                      parts[4] = f" [{tag}]({url}/releases/latest) "
+                      parts[5] = f" {stars:,} "
+                      parts[6] = f" {downloads:,} "
+                      lines[i] = "|".join(parts) + ("\n" if line.endswith("\n") else "")
+                      matched += 1
+                  if matched != 1:
+                      raise RuntimeError(f"Missing or duplicate row: {project}")
+                  block = "".join(lines)
 
-          updated = before + start + block + end + after
-          if updated != original:
-              path.write_text(updated, encoding="utf-8")
+              updated = before + start + block + end + after
+              return original, updated
+
+          paths = [Path(name) for name in ("README.md", "README.zh-TW.md", "README.ja.md")]
+          # Validate every language before writing any of them.
+          updates = [(path, *update_readme(path)) for path in paths]
+          for path, original, updated in updates:
+              if original != updated:
+                  path.write_text(updated, encoding="utf-8")
           PY
       - name: Commit changes
         shell: bash
         run: |
-          if git diff --quiet -- README.md; then
+          if git diff --quiet -- README.md README.zh-TW.md README.ja.md; then
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md
+          git add README.md README.zh-TW.md README.ja.md
           git commit -m "Update public project statistics"
           git push
