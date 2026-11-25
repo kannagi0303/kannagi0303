@@ -1,5 +1,7 @@
 # かんなぎ (Kannagi)
 
+**English** | [繁體中文](https://github.com/kannagi0303/kannagi0303/blob/main/README.zh-TW.md) | [日本語](https://github.com/kannagi0303/kannagi0303/blob/main/README.ja.md)
+
 ## Why I Make Software
 
 The reason I started making software is simple. I could not find software that suited me.
