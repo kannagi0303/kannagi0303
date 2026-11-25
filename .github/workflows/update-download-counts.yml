@@ -1,4 +1,4 @@
-name: Update download counts
+name: Update download counts and project stats
 
 on:
   schedule:
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Update release download counts
+      - name: Update public project statistics
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -26,35 +26,73 @@ jobs:
           from pathlib import Path
           import re
           import subprocess
+          from html import escape
 
           owner = "kannagi0303"
           projects = ("yt-dlp-gui-v2", "yt-dlp-gui", "MPC-VR-Edition", "RelayGate")
-          counts = {}
+
+          def api(endpoint, jq, paginate=False):
+              args = ["gh", "api"]
+              if paginate:
+                  args.append("--paginate")
+              return subprocess.check_output(
+                  args + [endpoint, "--jq", jq], text=True
+              ).strip()
+
+          stats = {}
           for project in projects:
-              result = subprocess.check_output([
-                  "gh", "api", "--paginate",
-                  f"repos/{owner}/{project}/releases?per_page=100",
-                  "--jq", ".[] | select(.draft | not) | .assets[] | .download_count",
-              ], text=True)
-              counts[project] = sum(int(line) for line in result.splitlines() if line.strip())
+              endpoint = f"repos/{owner}/{project}"
+              result = api(
+                  endpoint + "/releases?per_page=100",
+                  ".[] | select(.draft | not) | .assets[] | .download_count",
+                  paginate=True,
+              )
+              downloads = sum(int(line) for line in result.splitlines() if line.strip())
+              stars = int(api(endpoint, ".stargazers_count"))
+              tag = api(endpoint + "/releases/latest", ".tag_name")
+              if not tag or tag == "null":
+                  raise RuntimeError(f"No latest release tag for {project}")
+              # Escape Markdown punctuation and HTML metacharacters in display labels.
+              tag = escape(tag, quote=False)
+              tag = re.sub(r"([\\\[\]`*_!|])", r"\\\1", tag)
+              stats[project] = (downloads, stars, tag)
 
           path = Path("README.md")
           original = path.read_text(encoding="utf-8")
           start, end = "<!-- downloads:start -->", "<!-- downloads:end -->"
           if original.count(start) != 1 or original.count(end) != 1:
-              raise RuntimeError("Expected exactly one download statistics block")
+              raise RuntimeError("Expected exactly one statistics block")
           before, remainder = original.split(start, 1)
           block, after = remainder.split(end, 1)
-          block, changed = re.subn(r"(?m)^\*\*Total downloads: [\d,]+\*\*$",
-                                    f"**Total downloads: {sum(counts.values()):,}**", block)
+          total = sum(item[0] for item in stats.values())
+          block, changed = re.subn(
+              r"(?m)^\*\*Total downloads: [\d,]+\*\*$",
+              f"**Total downloads: {total:,}**", block,
+          )
           if changed != 1:
               raise RuntimeError("Missing total downloads field")
-          for project, count in counts.items():
-              link = re.escape(f"https://github.com/{owner}/{project})")
-              pattern = rf"(?m)^(\| \[[^\n]+?\]\({link}[^\n]*?\|\s*)[\d,]+(\s*\|[ \t]*)$"
-              block, changed = re.subn(pattern, lambda m: f"{m[1]}{count:,}{m[2]}", block)
-              if changed != 1:
+
+          for project, (downloads, stars, tag) in stats.items():
+              url = f"https://github.com/{owner}/{project}"
+              prefix = f"| [{project}]({url}) |"
+              lines = block.splitlines(keepends=True)
+              matched = 0
+              for i, line in enumerate(lines):
+                  if not line.startswith(prefix):
+                      continue
+                  # Preserve the project name, description and manually set status.
+                  parts = re.split(r"(?<!\\)\|", line.rstrip("\n"))
+                  if len(parts) != 8:
+                      raise RuntimeError(f"Unexpected table structure for {project}")
+                  parts[4] = f" [{tag}]({url}/releases/latest) "
+                  parts[5] = f" {stars:,} "
+                  parts[6] = f" {downloads:,} "
+                  lines[i] = "|".join(parts) + ("\n" if line.endswith("\n") else "")
+                  matched += 1
+              if matched != 1:
                   raise RuntimeError(f"Missing or duplicate row: {project}")
+              block = "".join(lines)
+
           updated = before + start + block + end + after
           if updated != original:
               path.write_text(updated, encoding="utf-8")
@@ -68,5 +106,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add README.md
-          git commit -m "Update release download counts"
+          git commit -m "Update public project statistics"
           git push
