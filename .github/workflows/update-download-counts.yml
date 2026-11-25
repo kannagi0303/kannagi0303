@@ -1,0 +1,72 @@
+name: Update download counts
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-download-counts
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update release download counts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import subprocess
+
+          owner = "kannagi0303"
+          projects = ("yt-dlp-gui-v2", "yt-dlp-gui", "MPC-VR-Edition", "RelayGate")
+          counts = {}
+          for project in projects:
+              result = subprocess.check_output([
+                  "gh", "api", "--paginate",
+                  f"repos/{owner}/{project}/releases?per_page=100",
+                  "--jq", ".[] | select(.draft | not) | .assets[] | .download_count",
+              ], text=True)
+              counts[project] = sum(int(line) for line in result.splitlines() if line.strip())
+
+          path = Path("README.md")
+          original = path.read_text(encoding="utf-8")
+          start, end = "<!-- downloads:start -->", "<!-- downloads:end -->"
+          if original.count(start) != 1 or original.count(end) != 1:
+              raise RuntimeError("Expected exactly one download statistics block")
+          before, remainder = original.split(start, 1)
+          block, after = remainder.split(end, 1)
+          block, changed = re.subn(r"(?m)^\*\*Total downloads: [\d,]+\*\*$",
+                                    f"**Total downloads: {sum(counts.values()):,}**", block)
+          if changed != 1:
+              raise RuntimeError("Missing total downloads field")
+          for project, count in counts.items():
+              link = re.escape(f"https://github.com/{owner}/{project})")
+              pattern = rf"(?m)^(\| \[[^\n]+?\]\({link}[^\n]*?\|\s*)[\d,]+(\s*\|[ \t]*)$"
+              block, changed = re.subn(pattern, lambda m: f"{m[1]}{count:,}{m[2]}", block)
+              if changed != 1:
+                  raise RuntimeError(f"Missing or duplicate row: {project}")
+          updated = before + start + block + end + after
+          if updated != original:
+              path.write_text(updated, encoding="utf-8")
+          PY
+      - name: Commit changes
+        shell: bash
+        run: |
+          if git diff --quiet -- README.md; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Update release download counts"
+          git push
