@@ -45,13 +45,13 @@
 ## 專案
 
 <!-- downloads:start -->
-**總下載次數： 194,028**
+**總下載次數： 194,157**
 
 | 專案 | 簡介 | 維護狀態 | 最新版本 | Stars | 下載次數 |
 | --- | --- | --- | --- | ---: | ---: |
-| [yt-dlp-gui-v2](https://github.com/kannagi0303/yt-dlp-gui-v2) | 重新打造的 Windows 可攜式媒體下載工具圖形介面。 | 維護中 | [2026.10.10](https://github.com/kannagi0303/yt-dlp-gui-v2/releases/latest) | 310 | 16,841 |
-| [yt-dlp-gui](https://github.com/kannagi0303/yt-dlp-gui) | 最初為 yt-dlp 製作的 Windows 圖形介面。 | 停止維護 | [2023.03.28](https://github.com/kannagi0303/yt-dlp-gui/releases/latest) | 2,752 | 177,141 |
-| [MPC-VR-Edition](https://github.com/kannagi0303/MPC-VR-Edition) | 影片渲染與畫質強化。 | 維護中 | [v0.2.3](https://github.com/kannagi0303/MPC-VR-Edition/releases/latest) | 1 | 29 |
+| [yt-dlp-gui-v2](https://github.com/kannagi0303/yt-dlp-gui-v2) | 重新打造的 Windows 可攜式媒體下載工具圖形介面。 | 維護中 | [2026.10.10](https://github.com/kannagi0303/yt-dlp-gui-v2/releases/latest) | 310 | 16,936 |
+| [yt-dlp-gui](https://github.com/kannagi0303/yt-dlp-gui) | 最初為 yt-dlp 製作的 Windows 圖形介面。 | 停止維護 | [2023.03.28](https://github.com/kannagi0303/yt-dlp-gui/releases/latest) | 2,752 | 177,172 |
+| [MPC-VR-Edition](https://github.com/kannagi0303/MPC-VR-Edition) | 影片渲染與畫質強化。 | 維護中 | [v0.2.3](https://github.com/kannagi0303/MPC-VR-Edition/releases/latest) | 1 | 32 |
 | [RelayGate](https://github.com/kannagi0303/RelayGate) | 用於網路流量路由與內容處理的 Windows 工具。 | 維護中 | [v0.4.0](https://github.com/kannagi0303/RelayGate/releases/latest) | 4 | 17 |
 <!-- downloads:end -->
 

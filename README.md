@@ -45,13 +45,13 @@ Feel free to communicate with me in English, Traditional Chinese, or Japanese.
 ## Projects
 
 <!-- downloads:start -->
-**Total downloads: 194,028**
+**Total downloads: 194,157**
 
 | Project | Description | Status | Latest release | Stars | Downloads |
 | --- | --- | --- | --- | ---: | ---: |
-| [yt-dlp-gui-v2](https://github.com/kannagi0303/yt-dlp-gui-v2) | A rebuilt, portable Windows GUI for media downloaders. | Active | [2026.10.10](https://github.com/kannagi0303/yt-dlp-gui-v2/releases/latest) | 310 | 16,841 |
-| [yt-dlp-gui](https://github.com/kannagi0303/yt-dlp-gui) | The original Windows GUI for yt-dlp. | No longer maintained | [2023.03.28](https://github.com/kannagi0303/yt-dlp-gui/releases/latest) | 2,752 | 177,141 |
-| [MPC-VR-Edition](https://github.com/kannagi0303/MPC-VR-Edition) | Video rendering and enhancement. | Active | [v0.2.3](https://github.com/kannagi0303/MPC-VR-Edition/releases/latest) | 1 | 29 |
+| [yt-dlp-gui-v2](https://github.com/kannagi0303/yt-dlp-gui-v2) | A rebuilt, portable Windows GUI for media downloaders. | Active | [2026.10.10](https://github.com/kannagi0303/yt-dlp-gui-v2/releases/latest) | 310 | 16,936 |
+| [yt-dlp-gui](https://github.com/kannagi0303/yt-dlp-gui) | The original Windows GUI for yt-dlp. | No longer maintained | [2023.03.28](https://github.com/kannagi0303/yt-dlp-gui/releases/latest) | 2,752 | 177,172 |
+| [MPC-VR-Edition](https://github.com/kannagi0303/MPC-VR-Edition) | Video rendering and enhancement. | Active | [v0.2.3](https://github.com/kannagi0303/MPC-VR-Edition/releases/latest) | 1 | 32 |
 | [RelayGate](https://github.com/kannagi0303/RelayGate) | A Windows web traffic tool for routing and content processing. | Active | [v0.4.0](https://github.com/kannagi0303/RelayGate/releases/latest) | 4 | 17 |
 <!-- downloads:end -->
 
