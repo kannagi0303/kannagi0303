@@ -45,12 +45,12 @@
 ## プロジェクト
 
 <!-- downloads:start -->
-**総ダウンロード数： 194,157**
+**総ダウンロード数： 194,276**
 
 | プロジェクト | 概要 | メンテナンス状況 | 最新リリース | Stars | ダウンロード数 |
 | --- | --- | --- | --- | ---: | ---: |
-| [yt-dlp-gui-v2](https://github.com/kannagi0303/yt-dlp-gui-v2) | メディアダウンローダー向けに作り直した Windows 用ポータブル GUI。 | メンテナンス中 | [2026.10.10](https://github.com/kannagi0303/yt-dlp-gui-v2/releases/latest) | 310 | 16,936 |
-| [yt-dlp-gui](https://github.com/kannagi0303/yt-dlp-gui) | yt-dlp 向けの初代 Windows 用 GUI。 | メンテナンス終了 | [2023.03.28](https://github.com/kannagi0303/yt-dlp-gui/releases/latest) | 2,752 | 177,172 |
+| [yt-dlp-gui-v2](https://github.com/kannagi0303/yt-dlp-gui-v2) | メディアダウンローダー向けに作り直した Windows 用ポータブル GUI。 | メンテナンス中 | [2026.10.10](https://github.com/kannagi0303/yt-dlp-gui-v2/releases/latest) | 312 | 17,036 |
+| [yt-dlp-gui](https://github.com/kannagi0303/yt-dlp-gui) | yt-dlp 向けの初代 Windows 用 GUI。 | メンテナンス終了 | [2023.03.28](https://github.com/kannagi0303/yt-dlp-gui/releases/latest) | 2,752 | 177,191 |
 | [MPC-VR-Edition](https://github.com/kannagi0303/MPC-VR-Edition) | 動画のレンダリングと画質向上。 | メンテナンス中 | [v0.2.3](https://github.com/kannagi0303/MPC-VR-Edition/releases/latest) | 1 | 32 |
 | [RelayGate](https://github.com/kannagi0303/RelayGate) | 通信のルーティングやコンテンツ処理を行う Windows 用ツール。 | メンテナンス中 | [v0.4.0](https://github.com/kannagi0303/RelayGate/releases/latest) | 4 | 17 |
 <!-- downloads:end -->
